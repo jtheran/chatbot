@@ -8,20 +8,33 @@ services:
       - '3325:3325'
     volumes:
       - .:/base
-    
-  mongodb:
-        image: mongo:latest
-        container_name: mongo_db
-        restart: unless-stopped
-        command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-        ports:
-        - "27017:27017"
+    depends_on:
+      - sqlserverdb
+    command: >
+      sh -c "sleep 10 && npx prisma migrate deploy && npx prisma generate && npm run start"
+    networks:
+      - backend
 
-  redisdb:
-      image: redis:7
-      container_name: redis_db
-      restart: unless-stopped
-      ports:
-        - "6379:6379"
-      volumes:
-        - ./data/redis:/data
+  sqlserverdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_db
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Testing24!"
+    ports:
+      - "1433:1433"
+    restart: always
+    networks:
+      - backend
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    networks:
+      - backend
+
+networks:
+  backend:

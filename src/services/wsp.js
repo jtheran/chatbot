@@ -4,12 +4,13 @@ import mime from 'mime-types';
 import qrcode from 'qrcode';
 import { MongoStore } from 'wwebjs-mongo';
 import mongoose from 'mongoose';
+import config from '../config/config.js';
 import path from 'path';
 import logger from '../logs/logger.js';
 import { askGPT } from '../utils/gpt.js';
 
 
-const MONGO_URI = process.env.DATABASE_URL;
+const MONGO_URI = config.urlDB;
 await mongoose.connect(MONGO_URI);
 
 const storeMongo = new MongoStore({ mongoose: mongoose });
@@ -30,10 +31,28 @@ export const client = new Client({
 });
 
 client.on('qr', async (qr) => {
-    logger.info('[QR] Generando imagen del QR...');
-    const qrPath = path.join('public', 'qr.png');
-    await qrcode.toFile(qrPath, qr);
-    logger.info(`[QR] Imagen generada en ${qrPath}`);
+    try {
+        logger.info('[QR] Generando imagen del QR...');
+        const qrDir = path.join('public');
+        const qrPath = path.join(qrDir, 'qr.png');
+
+        // Crear la carpeta si no existe
+        if (!fs.existsSync(qrDir)) {
+            fs.mkdirSync(qrDir, { recursive: true });
+            logger.info(`[QR] Carpeta creada en ${qrDir}`);
+        }
+
+        // Guardar la imagen
+        await qrcode.toFile(qrPath, qr);
+        logger.info(`[QR] Imagen generada en ${qrPath}`);
+
+        // Mostrar QR en consola (opcional)
+        const qrTerminal = await qrcode.toString(qr, { type: 'terminal', small: true, errorCorrectionLevel: 'low', });
+        console.log(qrTerminal);
+
+    } catch (err) {
+        logger.error(`[QR] Error generando QR: ${err.message}`);
+    }
 });
 
 client.on('ready', () => {
