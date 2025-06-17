@@ -1,0 +1,21 @@
+stages:
+  - deploy
+
+deploy-job:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh sshpass
+  script:
+    - echo "🔐 Conectando al servidor y desplegando por SSH..."
+    - sshpass -p 'too1213' ssh -o StrictHostKeyChecking=no -p 25487 zabbix@201.219.216.217 << 'EOF'
+        cd documentos/projects/dashboard
+        echo "📥 Haciendo pull del repositorio..."
+        git pull origin main
+        echo "🧹 Bajando contenedores antiguos..."
+        docker compose down
+        echo "🔧 Reconstruyendo imágenes..."
+        docker compose build --no-cache
+        echo "🚀 Levantando contenedores..."
+        docker compose up -d --force-recreate
+      EOF

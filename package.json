@@ -1,0 +1,51 @@
+{
+  "name": "chatbot-lmstudio",
+  "version": "1.0.0",
+  "description": "BACKEND PARA CONEXION DE CHATBOT CON WHATSAAP",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "EXPRESS",
+    "JTW",
+    "NODEJS"
+  ],
+  "author": "JMTB",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^6.9.0",
+    "axios": "^1.10.0",
+    "bcrypt": "^6.0.0",
+    "check-disk-space": "^3.4.0",
+    "colors": "^1.4.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "gpt-tokenizer": "^3.0.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mime-types": "^3.0.1",
+    "mongoose": "^8.16.0",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.1",
+    "nodemailer": "^7.0.3",
+    "openai": "^5.5.0",
+    "os-utils": "^0.0.14",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "prisma": "^6.9.0",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.1",
+    "speedtest-net": "^2.2.0",
+    "whatsapp-web.js": "^1.30.0",
+    "winston": "^3.17.0",
+    "wwebjs-mongo": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

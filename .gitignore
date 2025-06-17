@@ -1,0 +1,13 @@
+.env
+.editorconfig
+/.vscode
+/node_modules
+package-lock.json
+/src/generated
+/src/logs/logger.log
+/docs/*.*
+/.wwebjs_auth
+/.wwebjs_cache
+/public/qr.png
+RemoteAuth.zip
+/whatsapp-session
