@@ -8,6 +8,5 @@ package-lock.json
 /docs/*.*
 /.wwebjs_auth
 /.wwebjs_cache
-/public/qr.png
 RemoteAuth.zip
 /whatsapp-session
