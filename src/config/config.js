@@ -14,7 +14,8 @@ const config = {
     adminPhone: process.env.ADMINPHONE || '+573001234567',
     urlDB: process.env.URL || 'mongodb://mongodb:27017/chatDB?replicaSet=rs0',
     keyGPT: process.env.OPENAI_API_KEY || '',
-    urlModel: process.env.IA_MODEL_URL || 'http:localhost:1234',
+    urlModel: process.env.IA_MODEL_URL || 'http://localhost:1234',
+    urlEmbedding: process.env.EMBEDDING_URL || 'http://localhost:6333',
     model: process.env.IA_MODEL || 'chatgpt',
 
 }

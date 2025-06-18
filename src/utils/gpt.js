@@ -69,32 +69,47 @@ const countTokens = (text) => {
 };
 
 
-
-export const generateEmbedding = async (text) => {
-  try{
-
-    const res = await lmStudio.embeddings.create({
-      model: config.model,
-      input: text
-    });
-
-    const embeding = {
-      content: res.data[0].embedding,
-      threadID: res._request_id,
-    }
-    logger.info('[GPT] EMBEBIDO GENERADO');
-    return embeding;
-
-  }catch(err){}
-
-    logger.info('[GPT] ERROR EMBEBIDO NO GENERADO: '+err.message);
-    return null
-};
-
 export const askGPT = async (msg, history = []) => {
   try {
     const messages = [
       { role: 'system', content: systemPrompt },
+      ...history,
+      { role: 'user', content: msg }
+    ];
+
+    const completion = await lmStudio.chat.completions.create({
+      model: config.model,
+      messages,
+      temperature: 0.5,
+      max_tokens: 2048 // ajusta según el modelo que uses
+    });
+
+    const systemTokens = countTokens(systemPrompt);
+    const userTokens = countTokens(msg);
+    const totalTokens = systemTokens + userTokens;
+
+    logger.info(`[TOKENS] System prompt: ${systemTokens}`);
+    logger.info(`[TOKENS] User prompt: ${userTokens}`);
+    logger.info(`[TOKENS] Total: ${totalTokens}`);
+
+    const response = {
+      content: completion.choices?.[0]?.message?.content || '[Sin respuesta]',
+      threadID: completion.id,
+      model: completion.model
+    }
+
+    logger.info('[GPT] RESPUESTA GENERADA');
+    return response
+  } catch (err) {
+    logger.error('[GPT] ERROR AL GENERAR RESPUESTA: ' + err.message);
+    return null;
+  }
+};
+
+export const askEmbeddingGPT = async (msg, context, history = []) => {
+  try {
+    const messages = [
+      { role: 'system', content: context },
       ...history,
       { role: 'user', content: msg }
     ];

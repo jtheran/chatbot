@@ -61,4 +61,14 @@ model Conversation {
   model      String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  messages   Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversation   Conversation @relation(fields: [conversationNumber], references: [number])
+  conversationNumber String
+  role           String    // "user" o "assistant"
+  content        String
+  createdAt      DateTime  @default(now())
 }
